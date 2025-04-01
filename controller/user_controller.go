@@ -58,7 +58,7 @@ func (uc *userController) Login(c echo.Context) error {
 	cookie.Path = "/"
 	
 	if os.Getenv("ENV") == "production" {
-		cookie.Domain = os.Getenv("FE_URL")     // e.g. nextdeploy-navy.vercel.app
+		cookie.Domain = os.Getenv("API_DOMAIN")     // e.g. nextdeploy-navy.vercel.app
 		cookie.Secure = true                         // HTTPS 通信に限定
 		cookie.SameSite = http.SameSiteNoneMode      // クロスサイト Cookie 対応
 	} else {

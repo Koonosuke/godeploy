@@ -21,15 +21,25 @@ func NewRouter(
 
 	// CORS 設定
 	e.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000", os.Getenv("FE_URL")},
-		AllowHeaders: []string{
-			echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept,
-			echo.HeaderAccessControlAllowHeaders, echo.HeaderXCSRFToken, echo.HeaderAuthorization,
+		AllowOrigins: []string{
+			"https://nextdeploy-navy.vercel.app",
+			"http://localhost:3000",
 		},
-		AllowMethods:     []string{"GET", "PUT", "POST", "DELETE"},
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			echo.HeaderAuthorization,
+			echo.HeaderAccessControlAllowHeaders,
+			echo.HeaderXRequestedWith,
+			echo.HeaderCookie,
+			echo.HeaderSetCookie,
+			echo.HeaderXCSRFToken,
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowCredentials: true,
 	}))
-
+	
 	// CSRF 保護
 	e.Use(echoMiddleware.CSRFWithConfig(echoMiddleware.CSRFConfig{
 		CookiePath:     "/",
