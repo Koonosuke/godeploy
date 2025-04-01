@@ -43,7 +43,7 @@ func NewRouter(
 	// CSRF 保護
 	e.Use(echoMiddleware.CSRFWithConfig(echoMiddleware.CSRFConfig{
 		CookiePath:     "/",
-		 CookieDomain:   os.Getenv("FE_URL"),
+		 CookieDomain:   os.Getenv("API_DOMAIN"),
 		// CookieDomain: "",
 		CookieHTTPOnly: true,
 		CookieSecure:    true,
