@@ -56,15 +56,19 @@ func (uc *userController) Login(c echo.Context) error {
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.Path = "/"
-	// cookie.Domain = os.Getenv("API_DOMAIN")
+	
 	if os.Getenv("ENV") == "production" {
-		cookie.Domain = os.Getenv("API_DOMAIN")
+		cookie.Domain = os.Getenv("FE_URL")     // e.g. nextdeploy-navy.vercel.app
+		cookie.Secure = true                         // HTTPS 通信に限定
+		cookie.SameSite = http.SameSiteNoneMode      // クロスサイト Cookie 対応
+	} else {
+		cookie.Secure = false
+		cookie.SameSite = http.SameSiteLaxMode
 	}
-	cookie.Secure = false
+	
 	cookie.HttpOnly = true
-	//cookie.SameSite = http.SameSiteNoneMode
-	cookie.SameSite = http.SameSiteLaxMode
 	c.SetCookie(cookie)
+	
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"token": token,
