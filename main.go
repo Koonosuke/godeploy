@@ -16,10 +16,13 @@ import (
 
 func main() {
 	// ✅ .env ファイルの読み込み
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("GO_ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Println("Warning: .env file not loaded")
+		}
 	}
+	
 
 	// ✅ AWS 設定の読み込み
 	config := model.Config{
