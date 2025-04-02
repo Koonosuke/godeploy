@@ -27,7 +27,6 @@ func NewUserController(uu usecase.IUserUsecase) IUserController {
 	return &userController{uu}
 }
 
-// ログイン処理
 func (uc *userController) Login(c echo.Context) error {
 	user := model.User{}
 	if err := c.Bind(&user); err != nil {
@@ -48,27 +47,25 @@ func (uc *userController) Login(c echo.Context) error {
 			"error": "認証に失敗しました",
 		})
 	}
-// cookie.Secure = true の意味
-//このCookieは HTTPS 通信のときだけ送信される という設定！
-	// トークンをCookieに設定
+
+	// ✅ Cookie設定
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
 	cookie.Value = token
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	cookie.Path = "/"
-	
+
 	if os.Getenv("ENV") == "production" {
-		cookie.Domain = os.Getenv("API_DOMAIN")     // e.g. nextdeploy-navy.vercel.app
-		cookie.Secure = true                         // HTTPS 通信に限定
-		cookie.SameSite = http.SameSiteNoneMode      // クロスサイト Cookie 対応
+
+		cookie.Secure = true                             // HTTPS 通信に限定
+		cookie.SameSite = http.SameSiteNoneMode          // クロスサイト Cookie 対応
 	} else {
 		cookie.Secure = false
 		cookie.SameSite = http.SameSiteLaxMode
 	}
-	
+
 	cookie.HttpOnly = true
 	c.SetCookie(cookie)
-	
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"token": token,

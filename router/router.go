@@ -5,7 +5,6 @@ import (
 	"chat_upgrade/middleware"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
@@ -43,8 +42,8 @@ func NewRouter(
 	// CSRF 保護
 	e.Use(echoMiddleware.CSRFWithConfig(echoMiddleware.CSRFConfig{
 		CookiePath:     "/",
-		 CookieDomain:   os.Getenv("API_DOMAIN"),
-		// CookieDomain: "",
+		
+		 CookieDomain: "",
 		CookieHTTPOnly: true,
 		CookieSecure:    true,
 		CookieSameSite: http.SameSiteNoneMode,  
